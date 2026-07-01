@@ -1,5 +1,5 @@
 import { supabase } from "./client";
-import { mapProperty, Property, PropertyRow } from "./types";
+import { mapProperty, mapPropertyImage, Property, PropertyRow, PropertyImageRow } from "./types";
 
 export const PAGE_SIZE = 8;
 
@@ -66,4 +66,36 @@ export async function getFeaturedProperties(): Promise<Property[]> {
   }
 
   return (data as PropertyRow[]).map(mapProperty);
+}
+
+/**
+ * Fetch a single property by its slug, including its images.
+ */
+export async function getPropertyBySlug(slug: string): Promise<Property | null> {
+  const { data: propertyData, error: propertyError } = await supabase
+    .from("properties")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (propertyError || !propertyData) {
+    console.error("[getPropertyBySlug] Supabase error:", propertyError?.message);
+    return null;
+  }
+
+  const property = mapProperty(propertyData as PropertyRow);
+
+  const { data: imagesData, error: imagesError } = await supabase
+    .from("property_images")
+    .select("*")
+    .eq("property_id", property.id)
+    .order("is_primary", { ascending: false }); // Primary images first
+
+  if (!imagesError && imagesData) {
+    property.images = (imagesData as PropertyImageRow[]).map(mapPropertyImage);
+  } else {
+    property.images = [];
+  }
+
+  return property;
 }
