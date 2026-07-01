@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Property } from "@/lib/data/mockProperties";
+import { Property } from "@/lib/supabase/types";
 
 interface PropertyCardProps {
   property: Property;

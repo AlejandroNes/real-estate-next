@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Property } from "@/lib/data/mockProperties";
+import { Property } from "@/lib/supabase/types";
 
-export default function FeaturedPropertyCard({ property }: { property: Property }) {
+export default function FeaturedPropertyCard({ property, isFirst = false }: { property: Property; isFirst?: boolean }) {
   return (
     <div className="group relative rounded-xl overflow-hidden shadow-soft bg-white dark:bg-white/5 cursor-pointer">
       <div className="aspect-[4/3] w-full overflow-hidden relative">
@@ -17,8 +17,7 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
         <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm flex items-center justify-center text-nordic-dark hover:bg-mosque hover:text-white transition-all cursor-pointer border-none outline-none">
           <span className="material-icons text-xl">favorite_border</span>
         </button>
-        {/* Only applied to the first one in the design, but let's add a subtle gradient to both or keep it conditionally? Design has it on the first. Let's conditionally add it based on id for exact match, or just omit if it's not strictly needed for both. Looking at the code, it's on "The Glass Pavilion". */}
-        {property.id === "f1" && (
+        {isFirst && (
           <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
         )}
       </div>

@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { featuredProperties } from "@/lib/data/mockProperties";
+import { getFeaturedProperties } from "@/lib/supabase/properties";
 import FeaturedPropertyCard from "./FeaturedPropertyCard";
 
-export default function FeaturedCollections() {
+export default async function FeaturedCollections() {
+  const featuredProperties = await getFeaturedProperties();
+
   return (
     <section className="mb-16">
       <div className="flex items-end justify-between mb-8">
@@ -15,8 +17,8 @@ export default function FeaturedCollections() {
         </Link>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {featuredProperties.map((property) => (
-          <FeaturedPropertyCard key={property.id} property={property} />
+        {featuredProperties.map((property, index) => (
+          <FeaturedPropertyCard key={property.id} property={property} isFirst={index === 0} />
         ))}
       </div>
     </section>
