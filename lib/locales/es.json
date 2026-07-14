@@ -1,0 +1,73 @@
+{
+  "Language": {
+    "es": "Español",
+    "en": "English"
+  },
+  "Navbar": {
+    "buy": "Comprar",
+    "rent": "Alquilar",
+    "sell": "Vender",
+    "savedHomes": "Guardados"
+  },
+  "Hero": {
+    "findYour": "Encuentra tu",
+    "sanctuary": "santuario"
+  },
+  "Search": {
+    "placeholder": "Ciudad, vecindario o dirección...",
+    "button": "Buscar",
+    "types": {
+      "All": "Todos",
+      "House": "Casa",
+      "Apartment": "Apartamento",
+      "Villa": "Villa",
+      "Penthouse": "Ático",
+      "Condo": "Condominio",
+      "Townhouse": "Adosado",
+      "Any Type": "Cualquier Tipo"
+    },
+    "filters": "Filtros"
+  },
+  "Filters": {
+    "title": "Filtros",
+    "location": "Ubicación",
+    "priceRange": "Rango de Precios",
+    "minPrice": "Precio Mínimo",
+    "maxPrice": "Precio Máximo",
+    "propertyType": "Tipo de Propiedad",
+    "bedrooms": "Dormitorios",
+    "bathrooms": "Baños",
+    "any": "Cualq",
+    "amenities": "Comodidades y Características",
+    "pool": "Piscina",
+    "gym": "Gimnasio",
+    "parking": "Estacionamiento",
+    "ac": "Aire Acondicionado",
+    "wifi": "Wifi alta velocidad",
+    "patio": "Patio / Terraza",
+    "clearAll": "Borrar todos los filtros",
+    "searchHomes": "Buscar Propiedades"
+  },
+  "Featured": {
+    "title": "Colecciones Destacadas",
+    "subtitle": "Propiedades seleccionadas para los más exigentes.",
+    "viewAll": "Ver todas",
+    "viewDetails": "Ver detalles",
+    "bed": "Hab",
+    "bath": "Baño"
+  },
+  "NewInMarket": {
+    "title": "Nuevas en el Mercado",
+    "subtitle": "Nuevas oportunidades agregadas esta semana.",
+    "notFound": "No se encontraron propiedades.",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "Transaction": {
+    "forSale": "En Venta",
+    "forRent": "En Alquiler",
+    "all": "Todos",
+    "buy": "Comprar",
+    "rent": "Alquilar"
+  }
+}

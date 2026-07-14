@@ -2,7 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Property } from "@/lib/supabase/types";
 
-export default function FeaturedPropertyCard({ property, isFirst = false }: { property: Property; isFirst?: boolean }) {
+interface FeaturedPropertyCardProps {
+  property: Property;
+  isFirst?: boolean;
+  dictFeatured: Record<string, any>;
+}
+
+export default function FeaturedPropertyCard({ property, isFirst = false, dictFeatured }: FeaturedPropertyCardProps) {
   return (
     <Link href={`/properties/${property.slug}`} className="block group cursor-pointer">
       <div className="relative rounded-xl overflow-hidden shadow-soft bg-white dark:bg-white/5 h-full">
@@ -41,10 +47,10 @@ export default function FeaturedPropertyCard({ property, isFirst = false }: { pr
           </div>
           <div className="flex items-center gap-6 mt-6 pt-6 border-t border-nordic-dark/5 dark:border-white/10">
             <div className="flex items-center gap-2 text-nordic-muted text-sm">
-              <span className="material-icons text-lg">king_bed</span> {property.beds} Beds
+              <span className="material-icons text-lg">king_bed</span> {property.beds} {dictFeatured.bed}
             </div>
             <div className="flex items-center gap-2 text-nordic-muted text-sm">
-              <span className="material-icons text-lg">bathtub</span> {property.baths} Baths
+              <span className="material-icons text-lg">bathtub</span> {property.baths} {dictFeatured.bath}
             </div>
             <div className="flex items-center gap-2 text-nordic-muted text-sm">
               <span className="material-icons text-lg">square_foot</span> {property.area} m²

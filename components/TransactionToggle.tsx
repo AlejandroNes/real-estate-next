@@ -2,7 +2,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function TransactionToggle() {
+interface TransactionToggleProps {
+  dictTransaction: Record<string, string>;
+}
+
+export default function TransactionToggle({ dictTransaction }: TransactionToggleProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -25,19 +29,19 @@ export default function TransactionToggle() {
         onClick={() => handleToggle("all")}
         className={`px-4 py-1.5 rounded-md text-sm font-medium cursor-pointer border-none transition-colors ${currentTransaction === "all" ? "bg-nordic-dark text-white shadow-sm" : "text-nordic-muted hover:text-nordic-dark dark:hover:text-white bg-transparent"}`}
       >
-        All
+        {dictTransaction.all || "All"}
       </button>
       <button 
         onClick={() => handleToggle("buy")}
         className={`px-4 py-1.5 rounded-md text-sm font-medium cursor-pointer border-none transition-colors ${currentTransaction === "buy" ? "bg-nordic-dark text-white shadow-sm" : "text-nordic-muted hover:text-nordic-dark dark:hover:text-white bg-transparent"}`}
       >
-        Buy
+        {dictTransaction.buy || "Buy"}
       </button>
       <button 
         onClick={() => handleToggle("rent")}
         className={`px-4 py-1.5 rounded-md text-sm font-medium cursor-pointer border-none transition-colors ${currentTransaction === "rent" ? "bg-nordic-dark text-white shadow-sm" : "text-nordic-muted hover:text-nordic-dark dark:hover:text-white bg-transparent"}`}
       >
-        Rent
+        {dictTransaction.rent || "Rent"}
       </button>
     </div>
   );

@@ -4,7 +4,12 @@ import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchFiltersModal from "./SearchFiltersModal";
 
-export default function SearchForm() {
+interface SearchFormProps {
+  dictSearch: Record<string, any>;
+  dictFilters: Record<string, any>;
+}
+
+export default function SearchForm({ dictSearch, dictFilters }: SearchFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -34,6 +39,8 @@ export default function SearchForm() {
     router.push(`/?${params.toString()}`);
   };
 
+  const propertyTypes = ["All", "House", "Apartment", "Villa", "Penthouse"];
+
   return (
     <>
       <form onSubmit={handleSearch} className="relative group max-w-2xl mx-auto">
@@ -44,7 +51,7 @@ export default function SearchForm() {
         </div>
         <input
           className="block w-full pl-12 pr-24 py-4 rounded-xl border-none bg-white dark:bg-white/5 text-nordic-dark dark:text-white shadow-soft placeholder-nordic-muted/60 focus:ring-2 focus:ring-mosque focus:bg-white dark:focus:bg-white/10 transition-all text-lg focus:outline-none"
-          placeholder="Search by city, neighborhood, or address..."
+          placeholder={dictSearch.placeholder}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -53,12 +60,12 @@ export default function SearchForm() {
           type="submit"
           className="absolute inset-y-2 right-2 px-6 bg-mosque hover:bg-mosque/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center shadow-lg shadow-mosque/20 cursor-pointer"
         >
-          Search
+          {dictSearch.button}
         </button>
       </form>
 
       <div className="flex items-center justify-center gap-3 overflow-x-auto hide-scroll py-2 px-4 -mx-4">
-        {["All", "House", "Apartment", "Villa", "Penthouse"].map((type) => {
+        {propertyTypes.map((type) => {
           const isActive = currentPropertyType === type || (type === "All" && !searchParams.get("propertyType"));
           return (
             <button
@@ -70,7 +77,7 @@ export default function SearchForm() {
                   : "bg-white dark:bg-white/5 border border-nordic-dark/5 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 hover:bg-mosque/5"
               }`}
             >
-              {type}
+              {dictSearch.types[type]}
             </button>
           );
         })}
@@ -79,13 +86,15 @@ export default function SearchForm() {
           onClick={() => setIsFiltersOpen(true)}
           className="whitespace-nowrap flex items-center gap-1 px-4 py-2 rounded-full text-nordic-dark font-medium text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
         >
-          <span className="material-icons text-base">tune</span> Filters
+          <span className="material-icons text-base">tune</span> {dictSearch.filters}
         </button>
       </div>
 
       <SearchFiltersModal 
         isOpen={isFiltersOpen} 
         onClose={() => setIsFiltersOpen(false)} 
+        dictFilters={dictFilters}
+        dictSearchTypes={dictSearch.types}
       />
     </>
   );

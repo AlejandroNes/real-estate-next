@@ -1,0 +1,73 @@
+{
+  "Language": {
+    "es": "Español",
+    "en": "English"
+  },
+  "Navbar": {
+    "buy": "Buy",
+    "rent": "Rent",
+    "sell": "Sell",
+    "savedHomes": "Saved Homes"
+  },
+  "Hero": {
+    "findYour": "Find your",
+    "sanctuary": "sanctuary"
+  },
+  "Search": {
+    "placeholder": "Search by city, neighborhood, or address...",
+    "button": "Search",
+    "types": {
+      "All": "All",
+      "House": "House",
+      "Apartment": "Apartment",
+      "Villa": "Villa",
+      "Penthouse": "Penthouse",
+      "Condo": "Condo",
+      "Townhouse": "Townhouse",
+      "Any Type": "Any Type"
+    },
+    "filters": "Filters"
+  },
+  "Filters": {
+    "title": "Filters",
+    "location": "Location",
+    "priceRange": "Price Range",
+    "minPrice": "Min Price",
+    "maxPrice": "Max Price",
+    "propertyType": "Property Type",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "any": "Any",
+    "amenities": "Amenities & Features",
+    "pool": "Swimming Pool",
+    "gym": "Gym",
+    "parking": "Parking",
+    "ac": "Air Conditioning",
+    "wifi": "High-speed Wifi",
+    "patio": "Patio / Terrace",
+    "clearAll": "Clear all filters",
+    "searchHomes": "Search Homes"
+  },
+  "Featured": {
+    "title": "Featured Collections",
+    "subtitle": "Curated properties for the discerning eye.",
+    "viewAll": "View all",
+    "viewDetails": "View details",
+    "bed": "Bed",
+    "bath": "Bath"
+  },
+  "NewInMarket": {
+    "title": "New in Market",
+    "subtitle": "Fresh opportunities added this week.",
+    "notFound": "No properties found.",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "Transaction": {
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "all": "All",
+    "buy": "Buy",
+    "rent": "Rent"
+  }
+}

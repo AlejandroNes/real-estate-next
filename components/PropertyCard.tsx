@@ -5,9 +5,10 @@ import { Property } from "@/lib/supabase/types";
 interface PropertyCardProps {
   property: Property;
   className?: string;
+  dictFeatured?: Record<string, any>;
 }
 
-export default function PropertyCard({ property, className = "" }: PropertyCardProps) {
+export default function PropertyCard({ property, className = "", dictFeatured = { bed: "Beds", bath: "Baths" } }: PropertyCardProps) {
   // Determine badge styling based on badgeType
   let badgeColorClass = "bg-nordic-dark/90";
   if (property.badgeType === "primary") {
@@ -48,10 +49,10 @@ export default function PropertyCard({ property, className = "" }: PropertyCardP
           <p className="text-nordic-muted text-xs mb-4">{property.location}</p>
           <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-100 dark:border-white/10">
             <div className="flex items-center gap-1 text-nordic-muted text-xs">
-              <span className="material-icons text-sm text-mosque/80">king_bed</span> {property.beds}
+              <span className="material-icons text-sm text-mosque/80">king_bed</span> {property.beds} {dictFeatured.bed}
             </div>
             <div className="flex items-center gap-1 text-nordic-muted text-xs">
-              <span className="material-icons text-sm text-mosque/80">bathtub</span> {property.baths}
+              <span className="material-icons text-sm text-mosque/80">bathtub</span> {property.baths} {dictFeatured.bath}
             </div>
             <div className="flex items-center gap-1 text-nordic-muted text-xs">
               <span className="material-icons text-sm text-mosque/80">square_foot</span> {property.area}m²

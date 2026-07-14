@@ -1,6 +1,8 @@
 import Link from "next/link";
 import PropertyCard from "./PropertyCard";
 import { Property } from "@/lib/supabase/types";
+import TransactionToggle from "./TransactionToggle";
+import { getDictionary } from "@/lib/i18n";
 
 interface NewInMarketProps {
   properties: Property[];
@@ -8,15 +10,14 @@ interface NewInMarketProps {
   totalPages: number;
 }
 
-import TransactionToggle from "./TransactionToggle";
-
-export default function NewInMarket({
+export default async function NewInMarket({
   properties,
   currentPage,
   totalPages,
 }: NewInMarketProps) {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
+  const dictionary = await getDictionary();
 
   return (
     <section>
@@ -24,25 +25,25 @@ export default function NewInMarket({
       <div className="flex items-end justify-between mb-8">
         <div>
           <h2 className="text-2xl font-light text-nordic-dark dark:text-white">
-            New in Market
+            {dictionary.NewInMarket.title}
           </h2>
           <p className="text-nordic-muted mt-1 text-sm">
-            Fresh opportunities added this week.
+            {dictionary.NewInMarket.subtitle}
           </p>
         </div>
-        <TransactionToggle />
+        <TransactionToggle dictTransaction={dictionary.Transaction} />
       </div>
 
       {/* Property Grid */}
       {properties.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+            <PropertyCard key={property.id} property={property} dictFeatured={dictionary.Featured} />
           ))}
         </div>
       ) : (
         <div className="text-center py-20 text-nordic-muted">
-          No properties found.
+          {dictionary.NewInMarket.notFound}
         </div>
       )}
 
@@ -57,12 +58,12 @@ export default function NewInMarket({
               className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-white/5 border border-nordic-dark/10 dark:border-white/10 hover:border-mosque hover:text-mosque text-nordic-dark dark:text-white font-medium rounded-lg transition-all hover:shadow-md text-sm"
             >
               <span className="material-icons text-sm">arrow_back</span>
-              Previous
+              {dictionary.NewInMarket.previous}
             </Link>
           ) : (
             <span className="flex items-center gap-2 px-5 py-2.5 bg-white/50 dark:bg-white/5 border border-nordic-dark/5 dark:border-white/5 text-nordic-muted font-medium rounded-lg text-sm cursor-not-allowed opacity-50">
               <span className="material-icons text-sm">arrow_back</span>
-              Previous
+              {dictionary.NewInMarket.previous}
             </span>
           )}
 
@@ -91,12 +92,12 @@ export default function NewInMarket({
               id="pagination-next"
               className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-white/5 border border-nordic-dark/10 dark:border-white/10 hover:border-mosque hover:text-mosque text-nordic-dark dark:text-white font-medium rounded-lg transition-all hover:shadow-md text-sm"
             >
-              Next
+              {dictionary.NewInMarket.next}
               <span className="material-icons text-sm">arrow_forward</span>
             </Link>
           ) : (
             <span className="flex items-center gap-2 px-5 py-2.5 bg-white/50 dark:bg-white/5 border border-nordic-dark/5 dark:border-white/5 text-nordic-muted font-medium rounded-lg text-sm cursor-not-allowed opacity-50">
-              Next
+              {dictionary.NewInMarket.next}
               <span className="material-icons text-sm">arrow_forward</span>
             </span>
           )}
