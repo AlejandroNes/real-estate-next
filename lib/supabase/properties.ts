@@ -12,6 +12,7 @@ interface GetPropertiesOptions {
   baths?: number;
   minPrice?: string;
   maxPrice?: string;
+  transactionType?: string;
 }
 
 interface GetPropertiesResult {
@@ -36,6 +37,7 @@ const MOCK_PROPERTIES: Property[] = [
     badgeType: "primary",
     imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
     isFeatured: false,
+    transactionType: "buy",
     slug: "luxury-villa-beverly-hills",
     lat: 34.0736,
     lng: -118.4004
@@ -53,6 +55,7 @@ const MOCK_PROPERTIES: Property[] = [
     badgeType: "secondary",
     imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80",
     isFeatured: false,
+    transactionType: "buy",
     slug: "downtown-penthouse-la",
     lat: 34.0407,
     lng: -118.2468
@@ -70,6 +73,7 @@ const MOCK_PROPERTIES: Property[] = [
     badgeType: "primary",
     imageUrl: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80",
     isFeatured: false,
+    transactionType: "rent",
     slug: "beachfront-house-malibu",
     lat: 34.0259,
     lng: -118.7798
@@ -87,6 +91,7 @@ const MOCK_PROPERTIES: Property[] = [
     badgeType: "secondary",
     imageUrl: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",
     isFeatured: false,
+    transactionType: "buy",
     slug: "modern-condo-hollywood",
     lat: 34.0928,
     lng: -118.3287
@@ -104,6 +109,7 @@ const MOCK_PROPERTIES: Property[] = [
     badgeType: "primary",
     imageUrl: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80",
     isFeatured: false,
+    transactionType: "rent",
     slug: "cozy-apartment-nyc",
     lat: 40.7812,
     lng: -73.9665
@@ -121,6 +127,7 @@ export async function getProperties({
   propertyType,
   beds,
   baths,
+  transactionType,
 }: GetPropertiesOptions = {}): Promise<GetPropertiesResult> {
   const safePage = Math.max(1, page);
   const from = (safePage - 1) * PAGE_SIZE;
@@ -145,6 +152,10 @@ export async function getProperties({
 
   if (baths && baths > 0) {
     queryBuilder = queryBuilder.gte("baths", baths);
+  }
+
+  if (transactionType === "buy" || transactionType === "rent") {
+    queryBuilder = queryBuilder.eq("transaction_type", transactionType);
   }
 
   const { data, error, count } = await queryBuilder
@@ -173,6 +184,9 @@ export async function getProperties({
   }
   if (baths && baths > 0) {
     filteredMocks = filteredMocks.filter(p => p.baths >= baths);
+  }
+  if (transactionType === "buy" || transactionType === "rent") {
+    filteredMocks = filteredMocks.filter(p => p.transactionType === transactionType);
   }
 
   // Add the mock items to the results (only on first page for simplicity)

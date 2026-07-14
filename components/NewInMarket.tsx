@@ -8,6 +8,8 @@ interface NewInMarketProps {
   totalPages: number;
 }
 
+import TransactionToggle from "./TransactionToggle";
+
 export default function NewInMarket({
   properties,
   currentPage,
@@ -28,17 +30,7 @@ export default function NewInMarket({
             Fresh opportunities added this week.
           </p>
         </div>
-        <div className="hidden md:flex bg-white dark:bg-white/5 p-1 rounded-lg">
-          <button className="px-4 py-1.5 rounded-md text-sm font-medium bg-nordic-dark text-white shadow-sm cursor-pointer border-none">
-            All
-          </button>
-          <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark dark:hover:text-white cursor-pointer border-none bg-transparent">
-            Buy
-          </button>
-          <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark dark:hover:text-white cursor-pointer border-none bg-transparent">
-            Rent
-          </button>
-        </div>
+        <TransactionToggle />
       </div>
 
       {/* Property Grid */}

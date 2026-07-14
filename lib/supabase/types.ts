@@ -29,6 +29,7 @@ export interface PropertyRow {
   badge_type: "primary" | "secondary" | "neutral" | null;
   image_url: string;
   is_featured: boolean;
+  transaction_type: 'buy' | 'rent' | null;
   slug: string;
   lat: number;
   lng: number;
@@ -49,6 +50,7 @@ export interface Property {
   badgeType: "primary" | "secondary" | "neutral" | null;
   imageUrl: string;
   isFeatured: boolean;
+  transactionType: 'buy' | 'rent' | null;
   slug: string;
   lat: number;
   lng: number;
@@ -70,6 +72,7 @@ export function mapProperty(row: PropertyRow): Property {
     badgeType: row.badge_type,
     imageUrl: row.image_url,
     isFeatured: row.is_featured,
+    transactionType: row.transaction_type,
     slug: row.slug,
     lat: row.lat,
     lng: row.lng,
