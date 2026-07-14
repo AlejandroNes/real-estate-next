@@ -9,11 +9,21 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const { page } = await searchParams;
+  const { page, query, propertyType, beds, baths } = await searchParams;
   const currentPage = typeof page === "string" ? parseInt(page, 10) : 1;
+  const resolvedQuery = typeof query === "string" ? query : undefined;
+  const resolvedType = typeof propertyType === "string" ? propertyType : undefined;
+  const resolvedBeds = typeof beds === "string" ? parseInt(beds, 10) : undefined;
+  const resolvedBaths = typeof baths === "string" ? parseInt(baths, 10) : undefined;
 
   const { data: properties, totalPages, currentPage: resolvedPage } =
-    await getProperties({ page: currentPage });
+    await getProperties({ 
+      page: currentPage, 
+      query: resolvedQuery, 
+      propertyType: resolvedType, 
+      beds: resolvedBeds, 
+      baths: resolvedBaths 
+    });
 
   return (
     <>
