@@ -7,7 +7,9 @@
     "buy": "Buy",
     "rent": "Rent",
     "sell": "Sell",
-    "savedHomes": "Saved Homes"
+    "savedHomes": "Saved Homes",
+    "login": "Log In",
+    "logout": "Log Out"
   },
   "Hero": {
     "findYour": "Find your",

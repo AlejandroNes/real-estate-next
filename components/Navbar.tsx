@@ -1,15 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import LanguageSelector from "./LanguageSelector";
 import { getDictionary, getCurrentLocale } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
+import NavbarUser from "./NavbarUser";
 
 export default async function Navbar() {
   const dictionary = await getDictionary();
   const currentLocale = await getCurrentLocale();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const avatarUrl = user?.user_metadata?.avatar_url;
 
   return (
     <nav className="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-nordic-dark/10 dark:border-white/5">
@@ -44,26 +43,11 @@ export default async function Navbar() {
               <span className="material-icons">notifications_none</span>
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-background-light dark:border-background-dark"></span>
             </button>
-            {user ? (
-              <button className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 dark:border-white/10 ml-2">
-                <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all relative">
-                  {avatarUrl ? (
-                    <Image 
-                      src={avatarUrl} 
-                      alt="Profile" 
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <span className="material-icons text-gray-500 flex items-center justify-center w-full h-full">person</span>
-                  )}
-                </div>
-              </button>
-            ) : (
-              <Link href="/login" className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 dark:border-white/10 ml-2">
-                <span className="text-sm font-medium hover:text-mosque transition-colors">Log In</span>
-              </Link>
-            )}
+            <NavbarUser 
+              user={user} 
+              loginText={dictionary.Navbar.login} 
+              logoutText={dictionary.Navbar.logout} 
+            />
           </div>
         </div>
       </div>
