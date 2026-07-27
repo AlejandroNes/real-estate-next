@@ -69,5 +69,37 @@
     "all": "All",
     "buy": "Buy",
     "rent": "Rent"
+  },
+  "PropertyPage": {
+    "notFound": "Property not found",
+    "metaDesc": "Magnificent property in {location} for {price}. Features {beds} bedrooms and {baths} bathrooms.",
+    "metaDescShort": "Property in {location} for {price}",
+    "viewAllPhotos": "View All Photos",
+    "topRatedAgent": "Top Rated Agent",
+    "scheduleVisit": "Schedule Visit",
+    "contactAgent": "Contact Agent",
+    "propertyFeatures": "Property Features",
+    "squareMeters": "Square Meters",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "garage": "Garage",
+    "aboutHome": "About this home",
+    "desc1": "Experience modern luxury in this architecturally stunning home located in the heart of {location}. Designed with an emphasis on indoor-outdoor living, the residence features floor-to-ceiling glass walls that flood the interiors with natural light.",
+    "desc2": "The open-concept kitchen is equipped with top-of-the-line appliances and custom cabinetry, perfect for culinary enthusiasts. Retreat to the primary suite, a sanctuary of relaxation with a spa-inspired bath and private balcony.",
+    "readMore": "Read more",
+    "amenities": "Amenities",
+    "amenityList": {
+      "smartHome": "Smart Home System",
+      "pool": "Swimming Pool",
+      "hvac": "Central Heating & Cooling",
+      "evCharging": "Electric Vehicle Charging",
+      "gym": "Private Gym",
+      "wineCellar": "Wine Cellar"
+    },
+    "estimatedPayment": "Estimated Payment",
+    "startingFrom": "Starting from",
+    "withDown": "with 20% down",
+    "calculateMortgage": "Calculate Mortgage",
+    "footer": "© 2026 LuxeEstate Inc. All rights reserved."
   }
 }

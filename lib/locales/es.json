@@ -11,7 +11,7 @@
   },
   "Hero": {
     "findYour": "Encuentra tu",
-    "sanctuary": "santuario"
+    "sanctuary": "Casa"
   },
   "Search": {
     "placeholder": "Ciudad, vecindario o dirección...",
@@ -69,5 +69,37 @@
     "all": "Todos",
     "buy": "Comprar",
     "rent": "Alquilar"
+  },
+  "PropertyPage": {
+    "notFound": "Propiedad no encontrada",
+    "metaDesc": "Magnífica propiedad en {location} por {price}. Cuenta con {beds} habitaciones y {baths} baños.",
+    "metaDescShort": "Propiedad en {location} por {price}",
+    "viewAllPhotos": "Ver Todas las Fotos",
+    "topRatedAgent": "Agente Destacada",
+    "scheduleVisit": "Programar Visita",
+    "contactAgent": "Contactar Agente",
+    "propertyFeatures": "Características de la Propiedad",
+    "squareMeters": "Metros Cuadrados",
+    "bedrooms": "Habitaciones",
+    "bathrooms": "Baños",
+    "garage": "Garaje",
+    "aboutHome": "Acerca de esta casa",
+    "desc1": "Experimente el lujo moderno en esta casa arquitectónicamente impresionante ubicada en el corazón de {location}. Diseñada con énfasis en la vida interior y exterior, la residencia cuenta con paredes de vidrio de piso a techo que inundan los interiores con luz natural.",
+    "desc2": "La cocina de concepto abierto está equipada con electrodomésticos de primera línea y gabinetes personalizados, perfectos para los entusiastas culinarios. Retírese a la suite principal, un santuario de relajación con un baño inspirado en un spa y un balcón privado.",
+    "readMore": "Leer más",
+    "amenities": "Comodidades",
+    "amenityList": {
+      "smartHome": "Sistema de Hogar Inteligente",
+      "pool": "Piscina",
+      "hvac": "Calefacción y Refrigeración Central",
+      "evCharging": "Carga de Vehículos Eléctricos",
+      "gym": "Gimnasio Privado",
+      "wineCellar": "Bodega de Vinos"
+    },
+    "estimatedPayment": "Pago Estimado",
+    "startingFrom": "Desde",
+    "withDown": "con 20% de inicial",
+    "calculateMortgage": "Calcular Hipoteca",
+    "footer": "© 2026 LuxeEstate Inc. Todos los derechos reservados."
   }
 }
