@@ -86,6 +86,14 @@ export default function NavbarUser({ user, loginText, logoutText }: NavbarUserPr
           </div>
 
           <div className="py-1">
+            <Link
+              href="/admin"
+              onClick={() => setIsOpen(false)}
+              className="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-sm text-nordic dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors font-medium border-b border-gray-100 dark:border-white/10"
+            >
+              <span className="material-icons text-lg text-primary dark:text-emerald-400">admin_panel_settings</span>
+              <span>Panel Admin</span>
+            </Link>
             <button
               onClick={handleSignOut}
               className="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors font-medium"

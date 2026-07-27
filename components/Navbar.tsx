@@ -33,6 +33,10 @@ export default async function Navbar() {
             <Link href="#" className="text-nordic-dark/70 hover:text-nordic-dark font-medium text-sm hover:border-b-2 hover:border-nordic-dark/20 px-1 py-1 transition-all">
               {dictionary.Navbar.savedHomes}
             </Link>
+            <Link href="/admin" className="text-primary dark:text-emerald-400 font-semibold text-sm hover:underline flex items-center gap-1 px-1 py-1">
+              <span className="material-icons text-base">admin_panel_settings</span>
+              <span>Admin</span>
+            </Link>
           </div>
           <div className="flex items-center space-x-6">
             <LanguageSelector currentLocale={currentLocale} dictionary={dictionary.Language} />

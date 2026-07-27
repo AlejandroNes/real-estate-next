@@ -9,7 +9,8 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const { page, query, propertyType, beds, baths, transactionType } = await searchParams;
+  const { page, query, propertyType, beds, baths, transactionType, unauthorized } = await searchParams;
+  const isUnauthorized = unauthorized === "true";
   const currentPage = typeof page === "string" ? parseInt(page, 10) : 1;
   const resolvedQuery = typeof query === "string" ? query : undefined;
   const resolvedType = typeof propertyType === "string" ? propertyType : undefined;
@@ -33,6 +34,12 @@ export default async function Home({ searchParams }: HomeProps) {
     <>
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        {isUnauthorized && (
+          <div className="mt-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-300 text-sm font-semibold flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+            <span className="material-icons text-xl text-red-500">gpp_maybe</span>
+            <span>Acceso denegado. No tienes permisos de Administrador para acceder al Panel Admin.</span>
+          </div>
+        )}
         <Hero />
         {!hasActiveFilters && <FeaturedCollections />}
         <NewInMarket
