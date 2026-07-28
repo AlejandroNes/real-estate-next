@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/browser-client';
 import { useEffect, useState } from 'react';
 
 export default function AdminNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const supabase = createClient();
   const [currentUser, setCurrentUser] = useState<any>(null);
 
@@ -17,6 +18,12 @@ export default function AdminNavbar() {
     }
     getUser();
   }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+    router.refresh();
+  };
 
   const isPropertiesActive = pathname === '/admin/properties' || pathname === '/admin';
   const isUsersActive = pathname === '/admin/users';
@@ -64,13 +71,13 @@ export default function AdminNavbar() {
             </div>
           </div>
 
-          {/* Secondary Nav / Profile */}
-          <div className="flex items-center gap-4">
+          {/* Secondary Nav / Profile / Logout */}
+          <div className="flex items-center gap-3">
             <button className="p-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/5 transition-colors">
               <span className="material-icons text-xl">notifications_none</span>
             </button>
 
-            <div className="flex items-center gap-3 pl-4 border-l border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-gray-700">
               <div className="flex flex-col items-end hidden sm:flex">
                 <span className="text-sm font-semibold text-nordic dark:text-white truncate max-w-[140px]">
                   {currentUser?.email?.split('@')[0] || 'Admin User'}
@@ -80,6 +87,16 @@ export default function AdminNavbar() {
               <div className="h-9 w-9 rounded-full bg-primary/20 text-primary dark:text-emerald-300 font-bold text-sm flex items-center justify-center ring-2 ring-white dark:ring-primary/20">
                 {currentUser?.email?.charAt(0).toUpperCase() || 'A'}
               </div>
+
+              {/* Logout Button */}
+              <button
+                onClick={handleSignOut}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 border border-red-200 dark:border-red-800/40 transition-all ml-1 cursor-pointer"
+                title="Cerrar sesión"
+              >
+                <span className="material-icons text-base">logout</span>
+                <span className="hidden sm:inline">Cerrar Sesión</span>
+              </button>
             </div>
           </div>
         </div>

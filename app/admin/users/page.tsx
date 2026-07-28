@@ -14,6 +14,10 @@ export default function AdminUsersPage() {
   const [savingUserId, setSavingUserId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
+  // Pagination State (6 items per page)
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
+
   // Add user modal state
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [newUserEmail, setNewUserEmail] = useState('');
@@ -73,6 +77,16 @@ export default function AdminUsersPage() {
     }
   };
 
+  const handleSearchChange = (val: string) => {
+    setSearchTerm(val);
+    setCurrentPage(1);
+  };
+
+  const handleTabChange = (tab: 'all' | 'agents' | 'admins') => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
+
   const handleAddUserSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUserEmail) return;
@@ -101,6 +115,13 @@ export default function AdminUsersPage() {
     if (activeTab === 'admins') return matchesSearch && (u.role === 'admin');
     return matchesSearch;
   });
+
+  // Pagination logic
+  const totalFiltered = filteredUsers.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / ITEMS_PER_PAGE));
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalFiltered);
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
   return (
     <>
@@ -137,7 +158,7 @@ export default function AdminUsersPage() {
                 type="text"
                 placeholder="Search by name, email..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-white dark:bg-gray-800 text-nordic dark:text-white shadow-sm placeholder-nordic/30 focus:ring-2 focus:ring-primary focus:bg-white transition-all text-sm"
               />
             </div>
@@ -153,7 +174,7 @@ export default function AdminUsersPage() {
 
         <div className="mt-8 flex gap-6 border-b border-nordic/10 overflow-x-auto">
           <button
-            onClick={() => setActiveTab('all')}
+            onClick={() => handleTabChange('all')}
             className={`pb-3 text-sm font-semibold transition-colors ${
               activeTab === 'all'
                 ? 'text-primary border-b-2 border-primary'
@@ -163,7 +184,7 @@ export default function AdminUsersPage() {
             All Users ({userRoles.length})
           </button>
           <button
-            onClick={() => setActiveTab('agents')}
+            onClick={() => handleTabChange('agents')}
             className={`pb-3 text-sm font-medium transition-colors ${
               activeTab === 'agents'
                 ? 'text-primary border-b-2 border-primary'
@@ -173,7 +194,7 @@ export default function AdminUsersPage() {
             Agents ({userRoles.filter(u => u.role === 'agent').length})
           </button>
           <button
-            onClick={() => setActiveTab('admins')}
+            onClick={() => handleTabChange('admins')}
             className={`pb-3 text-sm font-medium transition-colors ${
               activeTab === 'admins'
                 ? 'text-primary border-b-2 border-primary'
@@ -199,13 +220,13 @@ export default function AdminUsersPage() {
             <span className="material-icons animate-spin text-3xl text-primary mb-2">sync</span>
             <p className="text-sm font-medium">Loading user directory...</p>
           </div>
-        ) : filteredUsers.length === 0 ? (
+        ) : paginatedUsers.length === 0 ? (
           <div className="p-12 text-center text-nordic/60 dark:text-gray-400">
             <span className="material-icons text-4xl mb-2">no_accounts</span>
             <p className="text-sm font-medium">No users found matching filter.</p>
           </div>
         ) : (
-          filteredUsers.map((userRecord, index) => {
+          paginatedUsers.map((userRecord, index) => {
             const isDropdownOpen = openDropdownId === userRecord.user_id;
 
             return (
@@ -216,7 +237,7 @@ export default function AdminUsersPage() {
                     ? 'bg-[#D9ECC8] dark:bg-primary/20 border-transparent hover:shadow-md'
                     : 'bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-[#D9ECC8]/50 dark:hover:bg-primary/20'
                 }`}
-                style={{ zIndex: filteredUsers.length - index + 10 }}
+                style={{ zIndex: paginatedUsers.length - index + 10 }}
               >
                 {/* User Details */}
                 <div className="col-span-12 md:col-span-4 flex items-center w-full">
@@ -337,21 +358,27 @@ export default function AdminUsersPage() {
           <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
               <p className="text-sm text-nordic/60 dark:text-gray-400">
-                Showing <span className="font-medium text-nordic dark:text-white">1</span> to <span className="font-medium text-nordic dark:text-white">{filteredUsers.length}</span> of <span className="font-medium text-nordic dark:text-white">{userRoles.length}</span> users
+                Showing <span className="font-medium text-nordic dark:text-white">{totalFiltered > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-nordic dark:text-white">{endIndex}</span> of <span className="font-medium text-nordic dark:text-white">{totalFiltered}</span> users
               </p>
             </div>
-            <div>
-              <nav className="relative z-0 inline-flex rounded-md shadow-none -space-x-px">
-                <button className="relative inline-flex items-center px-2 py-2 rounded-l-md text-sm font-medium text-nordic/50 hover:text-primary transition-colors">
-                  <span className="material-icons text-xl">chevron_left</span>
-                </button>
-                <button className="z-10 bg-primary text-white relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md mx-1 shadow-sm">
-                  1
-                </button>
-                <button className="relative inline-flex items-center px-2 py-2 rounded-r-md text-sm font-medium text-nordic/50 hover:text-primary transition-colors">
-                  <span className="material-icons text-xl">chevron_right</span>
-                </button>
-              </nav>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1 || totalFiltered === 0}
+                className="px-3.5 py-1.5 text-sm border border-gray-200 dark:border-primary/30 rounded-md text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-all"
+              >
+                Anterior
+              </button>
+              <span className="px-3 py-1.5 text-xs font-semibold text-primary dark:text-emerald-300 bg-primary/10 rounded-md">
+                {currentPage} / {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage >= totalPages || totalFiltered === 0}
+                className="px-3.5 py-1.5 text-sm border border-gray-200 dark:border-primary/30 rounded-md text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-all"
+              >
+                Siguiente
+              </button>
             </div>
           </div>
         </div>

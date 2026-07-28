@@ -13,6 +13,10 @@ export default function AdminPropertiesPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
+  // Pagination State (6 items per page)
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
+
   useEffect(() => {
     async function loadProperties() {
       setLoading(true);
@@ -40,6 +44,11 @@ export default function AdminPropertiesPage() {
     }
   };
 
+  const handleSearchChange = (val: string) => {
+    setSearchTerm(val);
+    setCurrentPage(1);
+  };
+
   const filteredProperties = properties.filter(p => {
     const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.location.toLowerCase().includes(searchTerm.toLowerCase());
@@ -52,6 +61,13 @@ export default function AdminPropertiesPage() {
   const totalListings = properties.length;
   const activeCount = properties.filter(p => !p.isFeatured).length;
   const featuredCount = properties.filter(p => p.isFeatured).length;
+
+  // Pagination logic
+  const totalFiltered = filteredProperties.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / ITEMS_PER_PAGE));
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalFiltered);
+  const paginatedProperties = filteredProperties.slice(startIndex, endIndex);
 
   return (
     <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -84,7 +100,7 @@ export default function AdminPropertiesPage() {
               type="text"
               placeholder="Filter properties..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="bg-white dark:bg-[#152e2a] border border-gray-200 dark:border-primary/30 text-nordic dark:text-gray-300 px-4 py-2.5 pl-10 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 shadow-sm"
             />
             <span className="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-base">search</span>
@@ -143,14 +159,14 @@ export default function AdminPropertiesPage() {
             <span className="material-icons animate-spin text-3xl text-primary mb-2">sync</span>
             <p className="text-sm font-medium">Loading property portfolio...</p>
           </div>
-        ) : filteredProperties.length === 0 ? (
+        ) : paginatedProperties.length === 0 ? (
           <div className="p-12 text-center text-gray-400">
             <span className="material-icons text-4xl mb-2">search_off</span>
             <p className="text-sm font-medium">No properties match your filter criteria.</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-100 dark:divide-primary/10">
-            {filteredProperties.map((prop) => (
+            {paginatedProperties.map((prop) => (
               <div
                 key={prop.id}
                 className="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-[#EEF6F6]/50 dark:hover:bg-primary/5 transition-colors items-center"
@@ -236,11 +252,26 @@ export default function AdminPropertiesPage() {
         {/* Pagination Footer */}
         <div className="px-6 py-4 border-t border-gray-100 dark:border-primary/20 flex items-center justify-between bg-gray-50/50 dark:bg-primary/5">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Showing <span className="font-medium text-nordic dark:text-white">1</span> to <span className="font-medium text-nordic dark:text-white">{filteredProperties.length}</span> of <span className="font-medium text-nordic dark:text-white">{totalListings}</span> results
+            Showing <span className="font-medium text-nordic dark:text-white">{totalFiltered > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-nordic dark:text-white">{endIndex}</span> of <span className="font-medium text-nordic dark:text-white">{totalFiltered}</span> results
           </div>
-          <div className="flex gap-2">
-            <button className="px-3 py-1 text-sm border border-gray-200 dark:border-primary/30 rounded-md text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-primary/20 disabled:opacity-50">Previous</button>
-            <button className="px-3 py-1 text-sm border border-gray-200 dark:border-primary/30 rounded-md text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-primary/20">Next</button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1 || totalFiltered === 0}
+              className="px-3.5 py-1.5 text-sm border border-gray-200 dark:border-primary/30 rounded-md text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-all"
+            >
+              Anterior
+            </button>
+            <span className="px-3 py-1.5 text-xs font-semibold text-primary dark:text-emerald-300 bg-primary/10 rounded-md">
+              {currentPage} / {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage >= totalPages || totalFiltered === 0}
+              className="px-3.5 py-1.5 text-sm border border-gray-200 dark:border-primary/30 rounded-md text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-all"
+            >
+              Siguiente
+            </button>
           </div>
         </div>
       </div>
