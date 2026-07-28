@@ -34,6 +34,11 @@ export interface PropertyRow {
   lat: number;
   lng: number;
   created_at: string;
+  description: string | null;
+  property_type: string | null;
+  status: string | null;
+  year_built: number | null;
+  amenities: any | null;
 }
 
 /** Camel-case shape used throughout the UI */
@@ -55,6 +60,11 @@ export interface Property {
   lat: number;
   lng: number;
   images?: PropertyImage[];
+  description: string | null;
+  propertyType: string | null;
+  status: string | null;
+  yearBuilt: number | null;
+  amenities: any | null;
 }
 
 /** Map a DB row to the UI-friendly shape */
@@ -76,6 +86,11 @@ export function mapProperty(row: PropertyRow): Property {
     slug: row.slug,
     lat: row.lat,
     lng: row.lng,
+    description: row.description,
+    propertyType: row.property_type,
+    status: row.status,
+    yearBuilt: row.year_built,
+    amenities: row.amenities,
   };
 }
 

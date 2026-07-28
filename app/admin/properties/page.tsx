@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { getProperties } from '@/lib/supabase/properties';
 import { Property } from '@/lib/supabase/types';
 import { togglePropertyFeaturedAction } from '@/app/actions/admin-actions';
@@ -20,7 +21,7 @@ export default function AdminPropertiesPage() {
   useEffect(() => {
     async function loadProperties() {
       setLoading(true);
-      const res = await getProperties({ page: 1 });
+      const res = await getProperties({ page: 1, includeAll: true });
       setProperties(res.data);
       setLoading(false);
     }
@@ -105,9 +106,9 @@ export default function AdminPropertiesPage() {
             />
             <span className="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-base">search</span>
           </div>
-          <button className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-md shadow-primary/20 transition-all transform hover:-translate-y-0.5 inline-flex items-center gap-2">
+          <Link href="/admin/properties/new" className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-md shadow-primary/20 transition-all transform hover:-translate-y-0.5 inline-flex items-center gap-2">
             <span className="material-icons text-base">add</span> Add New Property
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -240,9 +241,9 @@ export default function AdminPropertiesPage() {
                   >
                     <span className="material-icons text-xl">{prop.isFeatured ? 'star' : 'star_outline'}</span>
                   </button>
-                  <button className="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-[#D9ECC8]/30 transition-all" title="Edit Property">
+                  <Link href={`/admin/properties/${prop.id}`} className="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-[#D9ECC8]/30 transition-all" title="Edit Property">
                     <span className="material-icons text-xl">edit</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
