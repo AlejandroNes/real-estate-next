@@ -32,6 +32,29 @@ export async function togglePropertyFeaturedAction(propertyId: string, currentFe
   }
 }
 
+export async function togglePropertyActiveAction(propertyId: string, currentActiveState: boolean) {
+  try {
+    const supabase = createAdminClient();
+    const { error } = await supabase
+      .from('properties')
+      .update({ is_active: !currentActiveState })
+      .eq('id', propertyId);
+
+    if (error) {
+      console.error('[togglePropertyActiveAction] Error:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath('/admin/properties');
+    revalidatePath('/properties');
+    revalidatePath('/');
+    return { success: true, newActiveState: !currentActiveState };
+  } catch (err: any) {
+    console.error('[togglePropertyActiveAction] Exception:', err.message);
+    return { success: false, error: err.message };
+  }
+}
+
 export async function savePropertyAction(propertyData: any, isEdit: boolean, additionalImageUrls: string[] = []) {
   try {
     const supabase = createAdminClient();
@@ -51,6 +74,7 @@ export async function savePropertyAction(propertyData: any, isEdit: boolean, add
       badge_type: propertyData.badgeType || 'primary',
       image_url: propertyData.imageUrl || '',
       is_featured: propertyData.isFeatured || false,
+      is_active: propertyData.isActive !== undefined ? propertyData.isActive : true,
       transaction_type: propertyData.transactionType || 'buy',
       slug: propertyData.slug || propertyData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       lat: Number(propertyData.lat) || 0,

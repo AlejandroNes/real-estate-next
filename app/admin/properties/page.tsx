@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProperties } from '@/lib/supabase/properties';
 import { Property } from '@/lib/supabase/types';
-import { togglePropertyFeaturedAction } from '@/app/actions/admin-actions';
+import { togglePropertyFeaturedAction, togglePropertyActiveAction } from '@/app/actions/admin-actions';
 
 export default function AdminPropertiesPage() {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -45,6 +45,18 @@ export default function AdminPropertiesPage() {
     }
   };
 
+  const handleToggleActive = async (property: Property) => {
+    const res = await togglePropertyActiveAction(property.id, property.isActive);
+    if (res.success) {
+      setProperties(prev =>
+        prev.map(p => (p.id === property.id ? { ...p, isActive: res.newActiveState! } : p))
+      );
+      showNotification(`Propiedad "${property.title}" ${res.newActiveState ? 'activada' : 'desactivada'}`);
+    } else {
+      showNotification('Error al cambiar el estado de la propiedad', 'error');
+    }
+  };
+
   const handleSearchChange = (val: string) => {
     setSearchTerm(val);
     setCurrentPage(1);
@@ -54,14 +66,16 @@ export default function AdminPropertiesPage() {
     const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.location.toLowerCase().includes(searchTerm.toLowerCase());
     if (statusFilter === 'featured') return matchesSearch && p.isFeatured;
+    if (statusFilter === 'active') return matchesSearch && p.isActive;
+    if (statusFilter === 'disabled') return matchesSearch && !p.isActive;
     if (statusFilter === 'buy') return matchesSearch && p.transactionType === 'buy';
     if (statusFilter === 'rent') return matchesSearch && p.transactionType === 'rent';
     return matchesSearch;
   });
 
   const totalListings = properties.length;
-  const activeCount = properties.filter(p => !p.isFeatured).length;
-  const featuredCount = properties.filter(p => p.isFeatured).length;
+  const activeCount = properties.filter(p => p.isActive).length;
+  const disabledCount = properties.filter(p => !p.isActive).length;
 
   // Pagination logic
   const totalFiltered = filteredProperties.length;
@@ -136,11 +150,11 @@ export default function AdminPropertiesPage() {
 
         <div className="bg-white dark:bg-[#152e2a] p-5 rounded-xl border border-primary/10 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Featured Properties</p>
-            <p className="text-2xl font-bold text-nordic dark:text-white mt-1">{featuredCount}</p>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Disabled / Inactive</p>
+            <p className="text-2xl font-bold text-nordic dark:text-white mt-1">{disabledCount}</p>
           </div>
-          <div className="h-10 w-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
-            <span className="material-icons">star</span>
+          <div className="h-10 w-10 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-rose-600 dark:text-rose-400">
+            <span className="material-icons">block</span>
           </div>
         </div>
       </div>
@@ -149,9 +163,9 @@ export default function AdminPropertiesPage() {
       <div className="bg-white dark:bg-[#152e2a] rounded-xl shadow-sm border border-gray-200 dark:border-primary/20 overflow-hidden">
         {/* Table Header */}
         <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50/50 dark:bg-primary/5 border-b border-gray-100 dark:border-primary/10 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          <div className="col-span-6">Property Details</div>
+          <div className="col-span-5">Property Details</div>
           <div className="col-span-2">Price</div>
-          <div className="col-span-2">Status</div>
+          <div className="col-span-3">Status / Visibility</div>
           <div className="col-span-2 text-right">Actions</div>
         </div>
 
@@ -170,10 +184,12 @@ export default function AdminPropertiesPage() {
             {paginatedProperties.map((prop) => (
               <div
                 key={prop.id}
-                className="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-[#EEF6F6]/50 dark:hover:bg-primary/5 transition-colors items-center"
+                className={`group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-[#EEF6F6]/50 dark:hover:bg-primary/5 transition-colors items-center ${
+                  !prop.isActive ? 'opacity-70 bg-gray-50/60 dark:bg-gray-900/30' : ''
+                }`}
               >
                 {/* Property Details */}
-                <div className="col-span-12 md:col-span-6 flex gap-4 items-center">
+                <div className="col-span-12 md:col-span-5 flex gap-4 items-center">
                   <div className="relative h-20 w-28 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 shadow-sm">
                     {prop.imageUrl ? (
                       <Image
@@ -213,17 +229,29 @@ export default function AdminPropertiesPage() {
                   </div>
                 </div>
 
-                {/* Status */}
-                <div className="col-span-6 md:col-span-2">
-                  {prop.isFeatured ? (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>
-                      Featured
+                {/* Status & Active Switch */}
+                <div className="col-span-6 md:col-span-3 flex items-center gap-3">
+                  {/* Active Toggle Switch */}
+                  <button
+                    type="button"
+                    onClick={() => handleToggleActive(prop)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 border transition-all cursor-pointer ${
+                      prop.isActive
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                        : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800'
+                    }`}
+                    title={prop.isActive ? 'Click to disable property' : 'Click to activate property'}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${prop.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
+                    <span>{prop.isActive ? 'Active' : 'Disabled'}</span>
+                    <span className={`w-7 h-4 rounded-full p-0.5 transition-colors flex items-center ${prop.isActive ? 'bg-emerald-500 justify-end' : 'bg-gray-300 dark:bg-gray-600 justify-start'}`}>
+                      <span className="w-3 h-3 rounded-full bg-white shadow block"></span>
                     </span>
-                  ) : (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#D9ECC8] text-primary border border-primary/10">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary mr-1.5"></span>
-                      Active
+                  </button>
+
+                  {prop.isFeatured && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 uppercase tracking-wider">
+                      Featured
                     </span>
                   )}
                 </div>

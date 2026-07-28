@@ -34,6 +34,7 @@ export interface PropertyRow {
   lat: number;
   lng: number;
   created_at: string;
+  is_active: boolean;
   description: string | null;
   property_type: string | null;
   status: string | null;
@@ -55,6 +56,7 @@ export interface Property {
   badgeType: "primary" | "secondary" | "neutral" | null;
   imageUrl: string;
   isFeatured: boolean;
+  isActive: boolean;
   transactionType: 'buy' | 'rent' | null;
   slug: string;
   lat: number;
@@ -82,6 +84,7 @@ export function mapProperty(row: PropertyRow): Property {
     badgeType: row.badge_type,
     imageUrl: row.image_url,
     isFeatured: row.is_featured,
+    isActive: row.is_active ?? true,
     transactionType: row.transaction_type,
     slug: row.slug,
     lat: row.lat,

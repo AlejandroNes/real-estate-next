@@ -38,6 +38,7 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
       beds: 3,
       baths: 2,
       imageUrl: '',
+      isActive: initialData?.isActive !== undefined ? initialData.isActive : true,
       amenities: []
     }
   );
@@ -271,7 +272,7 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-nordic dark:text-gray-300 mb-1.5" htmlFor="price">
                     Price <span className="text-red-500">*</span>
@@ -306,6 +307,24 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
                     <option value="villa">Villa</option>
                     <option value="commercial">Commercial</option>
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-nordic dark:text-gray-300 mb-1.5">Visibility</label>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, isActive: !prev.isActive }))}
+                    className={`w-full py-2.5 px-4 rounded-md border font-medium text-sm flex items-center justify-between transition-colors ${
+                      formData.isActive
+                        ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300'
+                        : 'bg-rose-50 dark:bg-rose-950/30 border-rose-300 dark:border-rose-700 text-rose-700 dark:text-rose-300'
+                    }`}
+                  >
+                    <span>{formData.isActive ? 'Active' : 'Disabled'}</span>
+                    <span className={`w-8 h-4 rounded-full p-0.5 transition-colors flex items-center ${formData.isActive ? 'bg-emerald-500 justify-end' : 'bg-gray-400 justify-start'}`}>
+                      <span className="w-3 h-3 rounded-full bg-white shadow-sm block"></span>
+                    </span>
+                  </button>
                 </div>
               </div>
             </div>

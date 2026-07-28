@@ -44,6 +44,10 @@ export async function getProperties({
     .from("properties")
     .select("*", { count: "exact" });
 
+  if (!includeAll) {
+    queryBuilder = queryBuilder.eq("is_active", true);
+  }
+
   if (!includeAll && featured !== undefined) {
     queryBuilder = queryBuilder.eq("is_featured", featured);
   }
@@ -97,6 +101,7 @@ export async function getFeaturedProperties(): Promise<Property[]> {
     .from("properties")
     .select("*")
     .eq("is_featured", true)
+    .eq("is_active", true)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -123,6 +128,10 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
   }
 
   const property = mapProperty(propertyData as PropertyRow);
+
+  if (!property.isActive) {
+    return null;
+  }
 
   const { data: imagesData, error: imagesError } = await supabase
     .from("property_images")
