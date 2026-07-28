@@ -25,8 +25,9 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
-  const [formData, setFormData] = useState<Partial<Property>>(
-    initialData || {
+  const [formData, setFormData] = useState<Partial<Property>>(() => {
+    if (initialData) return initialData;
+    return {
       title: '',
       price: '',
       status: 'for-sale',
@@ -38,10 +39,10 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
       beds: 3,
       baths: 2,
       imageUrl: '',
-      isActive: initialData?.isActive !== undefined ? initialData.isActive : true,
+      isActive: true,
       amenities: []
-    }
-  );
+    };
+  });
 
   // Build initial image entries from existing data
   const buildInitialImages = (): ImageEntry[] => {
@@ -290,7 +291,7 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
 
                 <div>
                   <label className="block text-sm font-medium text-nordic dark:text-gray-300 mb-1.5" htmlFor="status">Status</label>
-                  <select id="status" name="status" value={formData.status} onChange={handleChange}
+                  <select id="status" name="status" value={formData.status || 'for-sale'} onChange={handleChange}
                     className="w-full px-4 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-nordic dark:text-gray-100 focus:ring-1 focus:ring-primary focus:border-primary transition-all text-base cursor-pointer">
                     <option value="for-sale">For Sale</option>
                     <option value="for-rent">For Rent</option>
@@ -300,7 +301,7 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
 
                 <div>
                   <label className="block text-sm font-medium text-nordic dark:text-gray-300 mb-1.5" htmlFor="propertyType">Property Type</label>
-                  <select id="propertyType" name="propertyType" value={formData.propertyType} onChange={handleChange}
+                  <select id="propertyType" name="propertyType" value={formData.propertyType || 'apartment'} onChange={handleChange}
                     className="w-full px-4 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-nordic dark:text-gray-100 focus:ring-1 focus:ring-primary focus:border-primary transition-all text-base cursor-pointer">
                     <option value="apartment">Apartment</option>
                     <option value="house">House</option>
